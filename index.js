@@ -1,5 +1,3 @@
-
-
 /*
  * Push API wrapper
  *
@@ -31,7 +29,7 @@ var errMsg = {
   INVALID_DEVICE_TYPE: 'Arguments error: invalid device_type, type of device_type is 1, 2, 3, 4 or 5',
   INVALID_MESSAGE_TYPE: 'Arguments error: invalid message_type, type of message_type is 0 or 1',
   INVALID_MSG_KEYS: 'Arguments error: invalid msg_keys, type of messages must be String',
-  INVALID_MESSAGE_EXPIRES: 'Arguments error: invalid message_expires, message_expires must be equal or greater than 0 ',
+  INVALID_MESSAGE_EXPIRES: 'Arguments error: invalid message_expires, message_expires must be equal or greater than 0 '
 };
 
 
@@ -56,8 +54,7 @@ function urlencode (str) {
  * @returns {Number} The current time in seconds since the Epoch
  */
 function getTimestamp() {
-    var timestamp = Math.floor(new Date().getTime() / 1000);
-    return timestamp;
+    return Math.floor(new Date().getTime() / 1000);
 }
 
 /*
@@ -315,7 +312,7 @@ function Push(options){
  * @param {Object} options
  * @param {String} options.user_id User id, the length of user_id must be less than 257B
  * @param {Number} [options.device_type] Device type
- * @param {Number} [options.start] Start postion, default value is 0
+ * @param {Number} [options.start] Start position, default value is 0
  * @param {Number} [options.limit] Numbers of lists, default value is 10
  * @param {function} cb(err, result)
  */
@@ -422,6 +419,409 @@ Push.prototype.pushMsg = function (options, cb) {
   });
 }
 
+/*
+*   verify bind
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {Number} [options.device_type] Device type: 3-android 4-ios
+ * @param {function} cb(err, result)
+*/
+Push.prototype.verifyBind=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
 
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['user_id']);
+
+    var path = COMMON_PATH + (options['channel_id'] || 'channel');
+
+    opt['method'] = 'verify_bind';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+/*
+ *   fetch offline msg
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {Number} [options.start] Start position, default value is 0
+ * @param {Number} [options.limit] Numbers of lists, default value is 10
+ * @param {function} cb(err, result)
+ */
+Push.prototype.fetchMsg=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['user_id']);
+
+    var path = COMMON_PATH + (options['channel_id'] || 'channel');
+
+    opt['method'] = 'fetch_msg';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+
+/*
+ *   fetch offline msg count
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {function} cb(err, result)
+ */
+Push.prototype.fetchMsgCount=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['user_id']);
+
+    var path = COMMON_PATH + (options['channel_id'] || 'channel');
+
+    opt['method'] = 'fetch_msgcount';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+
+/*
+ * delete offline msg
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {String} options.msg_ids Msg id, delete offline list of Msg id
+ * @param {function} cb(err, result)
+ */
+Push.prototype.deleteMsg=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['user_id','msg_ids']);
+
+    var path = COMMON_PATH + (options['channel_id'] || 'channel');
+
+    opt['method'] = 'delete_msg';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+
+/*
+ * set Tag
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {String} options.tag tag info, the length of tag must be less than 128B
+ * @param {function} cb(err, result)
+ */
+Push.prototype.setTag=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['tag']);
+
+    var path = COMMON_PATH + 'channel';
+
+    opt['method'] = 'set_tag';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+/*
+ * fetch Tag
+ * @param {Object} options
+ * @param {String} options.name ,tag name
+ * @param {Number} [options.start] Start position, default value is 0
+ * @param {Number} [options.limit] Numbers of lists, default value is 10
+ * @param {function} cb(err, result)
+ */
+Push.prototype.fetchTag=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    var path = COMMON_PATH + 'channel';
+
+    opt['method'] = 'fetch_tag';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+/*
+ * delete Tag
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {String} options.tag tag info, the length of tag must be less than 128B
+ * @param {function} cb(err, result)
+ */
+Push.prototype.deleteTag=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['tag']);
+
+    var path = COMMON_PATH + 'channel';
+
+    opt['method'] = 'delete_tag';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+/*
+ * query user Tag
+ * @param {Object} options
+ * @param {String} options.user_id User id, the length of user_id must be less than 257B
+ * @param {function} cb(err, result)
+ */
+Push.prototype.queryUserTag=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['user_id']);
+
+    var path = COMMON_PATH + 'channel';
+
+    opt['method'] = 'query_user_tags';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
+
+/*
+ * query device Tag
+ * @param {Object} options
+ * @param {Number} [options.channel_id]
+ * @param {function} cb(err, result)
+ */
+Push.prototype.queryDeviceTag=function(options, cb){
+    var self = this;
+    var opt = {};
+    if (typeof options === 'function' && arguments.length === 1) {
+        cb = options;
+        options = {}
+    }
+
+    if (!options) {
+        options = {}
+    }
+
+    for (var i in options) {
+        if (options.hasOwnProperty(i)) {
+            opt[i] = options[i];
+        }
+    }
+
+    checkOptions(opt, ['channel_id']);
+
+    var path = COMMON_PATH + (options['channel_id'] || 'channel');
+
+    opt['method'] = 'query_device_type';
+    opt['apikey'] = self.ak;
+    opt['timestamp'] = getTimestamp();
+
+    opt = sortObj(opt);
+    var wrap_id = {request_id: null};
+    request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+        self.request_id = wrap_id.request_id;
+        if (err) {
+            cb && cb(err);
+            return;
+        }
+        cb && cb(null, result);
+    });
+}
 
 module.exports = Push;
