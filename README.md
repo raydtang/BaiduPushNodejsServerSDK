@@ -3,7 +3,6 @@ BaiduPushNodejsServerSDK
 ========================
 感谢xiariqingquan，在其基础上补充了高级API接口和文档
 
-# 推送服务器端API接口-Node.js#
 
 # 基础API #
 
