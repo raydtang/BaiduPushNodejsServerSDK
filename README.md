@@ -150,7 +150,7 @@ response_params中包含以下字段：
 
 
 示例
-var baidu_push = require("baidu-push");
+var baidu_push = require("BaiduPushNodejsServerSDK");
 
 var client = new baidu_push({
 	ak: 'your ak here',
