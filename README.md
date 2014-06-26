@@ -153,10 +153,14 @@ response_params中包含以下字段：
 
     function pushMsg(client) {
       var opt = {
-    push_type: 1,
-    user_id: id0,
-    messages: JSON.stringify(["hello, push0", "hello, push1", "hello, push2"]),
-    msg_keys: JSON.stringify(["key0", "key1", "key2"])
+	user_id:"5************************4",
+	channel_id:"4***********************1",
+	push_type: 1,
+	device_type:4,
+	messages: JSON.stringify({title:'title',description:'description',aps:{alert:'aps alert',sound:'',badge:0}}),
+	msg_keys: JSON.stringify(["key0"]),
+	message_type:1,
+	deploy_status:1
       }
       client.pushMsg(opt, function(err, result) {
     if (err) {
