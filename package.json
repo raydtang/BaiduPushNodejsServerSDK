@@ -3,6 +3,7 @@
     "name": "baidu-push",
     "version": "1.0.0",
     "description": "Node.js module for baidu push service",
+    "author": "wangzheng422 <wangzheng422@gmail.com>",
     "repository"     : {
         "type"              : "git",
         "url"               : "https://github.com/wangzheng422/BaiduPushNodejsServerSDK.git"
