@@ -3,6 +3,9 @@ BaiduPushNodejsServerSDK
 ========================
 感谢xiariqingquan，在其基础上补充了高级API接口和文档
 
+# 安装 #
+
+npm install https://github.com/wangzheng422/BaiduPushNodejsServerSDK/tarball/master
 
 # 基础API #
 
