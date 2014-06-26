@@ -5,7 +5,8 @@ BaiduPushNodejsServerSDK
 
 # 安装 #
 
-npm install https://github.com/wangzheng422/BaiduPushNodejsServerSDK/tarball/master
+	npm install baidu-push-sdk
+	npm install https://github.com/wangzheng422/BaiduPushNodejsServerSDK/tarball/master
 
 # 基础API #
 
