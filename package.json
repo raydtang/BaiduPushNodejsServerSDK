@@ -1,7 +1,7 @@
 {
     "main": "index.js",
     "name": "baidu-push-sdk",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Node.js module for baidu push service",
     "author": "wangzheng422 <wangzheng422@gmail.com>",
     "repository"     : {
