@@ -150,25 +150,26 @@ response_params中包含以下字段：
 
 
 示例
-var baidu_push = require("baidu-push-sdk");
 
-var client = new baidu_push({
-	ak: 'your ak here',
-	sk: 'your sk here'
-});
-
-client.pushMsg({
-	user_id:"your user id here",
-	channel_id:"your channel id here",
-	push_type: 1,
-	device_type:4,
-	messages: JSON.stringify({title:'title',description:'description',aps:{alert:'aps message',sound:'',badge:0}}),
-	msg_keys: JSON.stringify(["key0"]),
-	message_type:1,
-	deploy_status:1
-}, function(err, result){
-	console.log(result);
-})
+	var baidu_push = require("baidu-push-sdk");
+	
+	var client = new baidu_push({
+		ak: 'your ak here',
+		sk: 'your sk here'
+	});
+	
+	client.pushMsg({
+		user_id:"your user id here",
+		channel_id:"your channel id here",
+		push_type: 1,
+		device_type:4,
+		messages: JSON.stringify({title:'title',description:'description',aps:{alert:'aps message',sound:'',badge:0}}),
+		msg_keys: JSON.stringify(["key0"]),
+		message_type:1,
+		deploy_status:1
+	}, function(err, result){
+		console.log(result);
+	})
 			
 # 高级API #
 
